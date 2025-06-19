@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import smtplib
 from email.message import EmailMessage
 import time
+import os  # MUDANÇA 1: Importamos a biblioteca 'os'
 
 # --- FUNÇÃO DE COLETA ÚNICA E ROBUSTA ---
 
@@ -61,8 +62,16 @@ def coletar_noticias_g1():
 def enviar_email(lista_de_noticias):
     """Envia um e-mail formatado com as notícias de uma única fonte."""
     EMAIL_REMETENTE = "henrydarre.hdm@gmail.com"
-    SENHA_APP = "fgrr uznq jcrx ltgm"
-    EMAIL_DESTINATARIO = "allan.doval@polijunior.com.br"
+
+    # MUDANÇA 2: A senha agora é lida de forma segura do ambiente
+    SENHA_APP = os.getenv('GMAIL_APP_PASSWORD')
+    
+    EMAIL_DESTINATARIO = "henrydarre.hdm@gmail.com"
+
+    # MUDANÇA 3: Uma verificação de segurança importante
+    if not SENHA_APP:
+        print("ERRO CRÍTICO: Senha de app não encontrada. Verifique os Secrets no GitHub.")
+        return # Para a execução se a senha não for encontrada
     
     # Assunto e título específicos para o G1
     assunto = f"📸 Suas Notícias de Hoje do G1"
