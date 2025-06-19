@@ -4,7 +4,6 @@ name: Coletor Diário de Notícias
 on:
   schedule:
     # Agenda para rodar todo dia às 10h UTC (7h da manhã no Brasil)
-    # Fuso horário atual: 19/06/2025, 11:57 AM (UTC-3)
     - cron: '0 10 * * *'
   # Permite que você rode manualmente pela aba "Actions" do GitHub
   workflow_dispatch:
@@ -26,13 +25,15 @@ jobs:
 
       # 3. Instala as bibliotecas do requirements.txt
       - name: Install dependencies
+        # O comando cd garante que estamos instalando os pacotes do local correto
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r coletor-noticias/requirements.txt
 
       # 4. Executa o seu script Python
       - name: Run Python scraper
         env:
           # Mapeia o "Secret" do GitHub para a variável de ambiente
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
-        run: python coletor_de_noticias.py
+        # MUDANÇA ESTÁ AQUI: Corrigindo o caminho para o script e o requirements
+        # Se sua pasta tiver outro nome, mude "
